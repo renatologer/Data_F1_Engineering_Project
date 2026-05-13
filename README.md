@@ -1,174 +1,177 @@
-# 🏎️ F1 Data Engineering Project
+# 🏎️ Projeto de Engenharia de Dados F1
 
-Projeto de Engenharia de Dados utilizando PySpark, Spark SQL e Databricks com dados da Fórmula 1.
+## 📌 Sobre o Projeto
 
----
+Este projeto foi desenvolvido utilizando conceitos modernos de Engenharia de Dados com foco em processamento distribuído, pipelines ETL e arquitetura em camadas.
 
-# 📌 Objetivo
+O objetivo principal foi construir um pipeline completo de dados da Fórmula 1 utilizando:
 
-Este projeto tem como objetivo construir um pipeline de dados utilizando arquitetura em camadas (Bronze, Silver e Gold) para processar e transformar dados históricos da Fórmula 1.
-
-O desenvolvimento foi realizado utilizando:
-
-- PySpark
-- Spark SQL
-- Databricks
-- Delta Lake
-- Git/GitHub
+* PySpark
+* SQL
+* Delta Lake
+* Databricks
+* Arquitetura Bronze / Silver / Gold
+* Jobs automatizados
+* Processamento de dados em larga escala
 
 ---
 
-# 🛠️ Tecnologias Utilizadas
+# 🧱 Arquitetura do Projeto
 
-| Tecnologia | Finalidade |
-|---|---|
-| Python | Linguagem principal |
-| PySpark | Processamento distribuído |
-| Spark SQL | Transformações analíticas |
-| Databricks | Ambiente de execução |
-| Delta Lake | Armazenamento dos dados |
-| Git/GitHub | Versionamento |
+O pipeline foi estruturado em três camadas:
+
+## 🥉 Bronze Layer
+
+Responsável pela ingestão dos dados brutos.
+
+### Atividades realizadas:
+
+* Leitura de arquivos CSV
+* Inferência de schema
+* Armazenamento inicial dos dados
+* Conversão para formato Delta
+
+### Tecnologias utilizadas:
+
+* PySpark
+* Delta Lake
+* Databricks Volumes
 
 ---
 
-# 🏗️ Arquitetura do Projeto
+## 🥈 Silver Layer
 
-O projeto foi desenvolvido utilizando arquitetura Medallion:
+Responsável pela limpeza e transformação dos dados.
 
-## Bronze Layer
+### Transformações realizadas:
 
-Camada responsável pela ingestão dos dados brutos.
+* Renomeação de colunas
+* Remoção de colunas desnecessárias
+* Tratamento de dados
+* Joins entre tabelas
+* Padronização dos dados
 
-Arquivos utilizados:
+### Exemplo:
 
-- Drivers
-- Races
-- Results
-- Constructors
+* Junção entre resultados das corridas e pilotos
+* Tratamento de pontuações
+* Criação de datasets analíticos
 
-## Silver Layer
+---
 
-Camada responsável pela limpeza e transformação dos dados.
+## 🥇 Gold Layer
 
-Exemplos:
+Responsável pela criação das métricas analíticas.
 
-- Remoção de colunas desnecessárias
-- Criação de novas colunas
-- Padronização de nomes
-- Tratamento de tipos de dados
+### Métricas desenvolvidas:
 
-## Gold Layer
+* Ranking de pilotos
+* Pontuação total
+* Ranking de construtores
+* Análises por nacionalidade
+* Consolidação de resultados
 
-Camada analítica para geração de métricas.
+---
 
-Exemplos:
+# ⚙️ Tecnologias Utilizadas
 
-- Ranking de pilotos
-- Soma total de pontos
-- Estatísticas por corrida
+| Tecnologia    | Finalidade                        |
+| ------------- | --------------------------------- |
+| PySpark       | Processamento distribuído         |
+| SQL           | Consultas analíticas              |
+| Databricks    | Plataforma de engenharia de dados |
+| Delta Lake    | Armazenamento e versionamento     |
+| Git/GitHub    | Versionamento                     |
+| Photon Engine | Otimização de execução            |
 
 ---
 
 # 📂 Estrutura do Projeto
 
 ```bash
-f1_data/
+Projeto_F1/
+│
+├── O_Project_3.ipynb
+├── README.md
 │
 ├── bronze/
 ├── silver/
-├── gold/
-│
-├── notebooks/
-│   └── O_Project_CORRIGIDO.ipynb
-│
-└── README.md
+└── gold/
 ```
 
 ---
 
-# ⚙️ Principais Processamentos
+# 🚀 Pipeline Automatizado
 
-## Leitura dos Dados
+Foi criado um Job no Databricks para automatizar a execução do pipeline.
+
+### Funcionalidades:
+
+* Execução agendada
+* Retry automático
+* Monitoramento de execução
+* Execução Serverless
+* Pipeline automatizado ponta a ponta
+
+---
+
+# 📊 Exemplos de Processamentos
+
+## Processamento com PySpark
 
 ```python
-races_df = spark.read.format("csv") \
-    .option("header", True) \
-    .option("inferSchema", True) \
-    .load("/Volumes/workspace/f1_proje/f1_data/The_Race.csv")
+silver_drivers_df = bronze_drivers_df \
+    .withColumnRenamed("forename", "nome") \
+    .withColumnRenamed("surname", "sobrenome")
 ```
 
-## Transformações com PySpark
+## Consulta SQL
 
-```python
-from pyspark.sql.functions import year, col
-
-silver_races_df = bronze_races_df \
-    .withColumn("Ano_corrida", year(col("date"))) \
-    .drop("url")
-```
-
-## Escrita em Delta
-
-```python
-silver_races_df.write.format("delta") \
-    .mode("overwrite") \
-    .save("/Volumes/workspace/f1_proje/f1_data/silver/races")
+```sql
+SELECT nationality,
+       SUM(points) AS pontuacao_total
+FROM results
+GROUP BY nationality
+ORDER BY pontuacao_total DESC
 ```
 
 ---
 
-# 📊 Resultados
+# 📈 Principais Conceitos Aplicados
 
-O projeto gera tabelas analíticas contendo:
-
-- Ranking de pilotos
-- Total de pontos
-- Informações das corridas
-- Estatísticas históricas
-
----
-
-# 🚀 Como Executar
-
-## 1. Clone o repositório
-
-```bash
-git clone https://github.com/renatologer/Data_F1_Engineering_Project.git
-```
-
-## 2. Abra no Databricks
-
-Importe o notebook `.ipynb` no ambiente Databricks.
-
-## 3. Execute as células em ordem
-
-O pipeline irá:
-
-1. Ler os arquivos CSV
-2. Criar DataFrames Bronze
-3. Processar dados Silver
-4. Gerar tabelas Gold
+* Engenharia de Dados
+* ETL Pipeline
+* Data Lakehouse
+* Arquitetura Medallion
+* Processamento Distribuído
+* Data Transformation
+* Delta Tables
+* Orquestração de Jobs
+* Data Analytics
+* SQL Analytics
 
 ---
 
-# 📈 Competências Demonstradas
+# 🔥 Diferenciais do Projeto
 
-- Engenharia de Dados
-- Processamento distribuído
-- ETL com PySpark
-- Modelagem em camadas
-- Manipulação de DataFrames
-- Spark SQL
-- Databricks
-- Versionamento com Git
+✅ Pipeline completo Bronze → Silver → Gold
+✅ Processamento distribuído com Spark
+✅ Uso de SQL e PySpark no mesmo projeto
+✅ Escrita em Delta Lake
+✅ Automação com Jobs no Databricks
+✅ Estrutura profissional de Engenharia de Dados
+✅ Projeto preparado para portfólio
 
 ---
 
 # 👨‍💻 Autor
 
-Renato Loger
+Renato Lima
 
-GitHub:
+Projeto desenvolvido para estudos e portfólio em Engenharia de Dados.
 
-https://github.com/renatologer
+---
 
+# 📌 Observação
+
+Este projeto foi desenvolvido utilizando ambiente Databricks Community Edition para simulação de pipelines reais de Engenharia de Dados.
