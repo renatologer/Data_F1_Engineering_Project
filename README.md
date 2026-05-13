@@ -13,7 +13,21 @@ O objetivo principal foi construir um pipeline completo de dados da Fórmula 1 u
 * Arquitetura Bronze / Silver / Gold
 * Jobs automatizados
 * Processamento de dados em larga escala
+# 🏗️ Arquitetura Medallion
 
+O projeto foi desenvolvido utilizando a arquitetura Medallion, separando os dados em camadas Bronze, Silver e Gold.
+
+## Camadas do Pipeline
+
+<p align="center">
+  <img src="images/A_Camada.png" width="900"/>
+</p>
+
+### Fluxo do Pipeline
+
+<p align="center">
+  <img src="images/O_Pipeline.png" width="900"/>
+</p>
 ---
 
 # 🧱 Arquitetura do Projeto
